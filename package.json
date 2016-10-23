@@ -4,6 +4,8 @@
   "description": "an experiment in dataflow",
   "license": "MIT",
   "repository": "justinvdm/flume",
+  "main": "cjs/index.js",
+  "jsnext:main": "src/index.js",
   "author": {
     "name": "justinvdm",
     "url": "justinvdm.github.io"
@@ -14,11 +16,10 @@
   "scripts": {
     "test": "ava tests/*.test.js",
     "lint": "eslint index.js tests/*.js",
-    "ci": "npm lint && npm test"
+    "ci": "npm lint && npm test",
+    "build:cjs": "babel src --out-dir cjs",
+    "build": "npm run build:cjs"
   },
-  "files": [
-    "index.js"
-  ],
   "keywords": [
     "dataflow",
     "reactive",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "ava": "^0.15.2",
     "babel": "^6.5.2",
+    "babel-cli": "^6.16.0",
     "babel-eslint": "^7.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.16.0",
     "eslint": "^3.7.1"
@@ -39,6 +41,8 @@
     "require": "babel-register"
   },
   "babel": {
-    "plugins": ["transform-es2015-modules-commonjs"]
+    "plugins": [
+      "transform-es2015-modules-commonjs"
+    ]
   }
 }
