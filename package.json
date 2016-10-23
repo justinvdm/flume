@@ -12,7 +12,7 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "ava",
+    "test": "ava tests/*.test.js",
     "lint": "eslint index.js tests/*.js",
     "ci": "npm lint && npm test"
   },
@@ -25,10 +25,20 @@
     "frp",
     "flux"
   ],
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "ava": "^0.15.2",
+    "babel": "^6.5.2",
     "babel-eslint": "^7.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.16.0",
     "eslint": "^3.7.1"
+  },
+  "ava": {
+    "require": "babel-register",
+    "babel": "inherit"
+  },
+  "babel": {
+    "plugins": ["transform-es2015-modules-commonjs"]
   }
 }
