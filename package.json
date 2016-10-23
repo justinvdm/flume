@@ -1,0 +1,34 @@
+{
+  "name": "flume-js",
+  "version": "0.0.0",
+  "description": "an experiment in dataflow",
+  "license": "MIT",
+  "repository": "justinvdm/flume",
+  "author": {
+    "name": "justinvdm",
+    "url": "justinvdm.github.io"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "ava",
+    "lint": "eslint index.js tests/*.js",
+    "ci": "npm lint && npm test"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "dataflow",
+    "reactive",
+    "frp",
+    "flux"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^0.15.2",
+    "babel-eslint": "^7.0.0",
+    "eslint": "^3.7.1"
+  }
+}
