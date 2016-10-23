@@ -8,4 +8,4 @@ export default function reduce(init, fn) {
     var res = fn(state, v);
     return [res, res];
   }
-};
+}
