@@ -36,8 +36,7 @@
     "eslint": "^3.7.1"
   },
   "ava": {
-    "require": "babel-register",
-    "babel": "inherit"
+    "require": "babel-register"
   },
   "babel": {
     "plugins": ["transform-es2015-modules-commonjs"]

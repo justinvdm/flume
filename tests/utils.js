@@ -3,6 +3,24 @@ function capture(arr) {
 }
 
 
+function defer() {
+  let resolve;
+  let reject;
+
+  const promise = new Promise((resolveFn, rejectFn) => {
+    resolve = resolveFn;
+    reject = rejectFn;
+  });
+
+  return {
+    resolve,
+    reject,
+    promise
+  };
+}
+
+
 export {
-  capture
+  capture,
+  defer
 };
