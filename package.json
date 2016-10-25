@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "an experiment in dataflow",
   "license": "MIT",
-  "repository": "justinvdm/flume",
+  "repository": "justinvdm/flume-js",
   "main": "cjs/index.js",
   "jsnext:main": "src/index.js",
   "author": {
@@ -18,7 +18,10 @@
     "lint": "eslint index.js tests/*.js",
     "ci": "npm lint && npm test",
     "build:cjs": "babel src --out-dir cjs",
-    "build": "npm run build:cjs"
+    "build:umd:dev": "rollup -c > build/flume.js",
+    "build:umd:prd": "rollup -c | uglifyjs > build/flume.min.js",
+    "build:umd": "mkdir -p build && npm run build:umd:dev && npm run build:umd:prd",
+    "build": "npm run build:cjs && npm run build:umd"
   },
   "keywords": [
     "dataflow",
@@ -35,7 +38,11 @@
     "babel-cli": "^6.16.0",
     "babel-eslint": "^7.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.16.0",
-    "eslint": "^3.7.1"
+    "eslint": "^3.7.1",
+    "rollup": "^0.36.3",
+    "rollup-plugin-commonjs": "^5.0.5",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "uglifyjs": "^2.4.10"
   },
   "ava": {
     "require": "babel-register"
