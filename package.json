@@ -18,9 +18,9 @@
     "lint": "eslint index.js tests/*.js",
     "ci": "npm lint && npm test",
     "build:cjs": "babel src --out-dir cjs",
-    "build:umd:dev": "rollup -c > build/flume.js",
-    "build:umd:prd": "rollup -c | uglifyjs > build/flume.min.js",
-    "build:umd": "mkdir -p build && npm run build:umd:dev && npm run build:umd:prd",
+    "build:umd:dev": "rollup -cmo dest/flume.js",
+    "build:umd:prd": "rollup -c | uglifyjs > dest/flume.min.js",
+    "build:umd": "mkdir -p dest && npm run build:umd:dev && npm run build:umd:prd",
     "build": "npm run build:cjs && npm run build:umd"
   },
   "keywords": [

@@ -6,7 +6,5 @@ export default {
   entry: 'src/index',
   format: 'umd',
   moduleName: 'flume',
-  plugins: [
-    node(),
-    commonjs()]
+  plugins: [node(), commonjs()]
 };
