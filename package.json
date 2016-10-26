@@ -23,7 +23,7 @@
     "build": "npm run clean && mkdir dist && npm run build:dev && npm run build:prd",
     "preversion": "npm run check",
     "version": "npm run build && git add -A dist",
-    "postversion": "echo git push && git push --tags"
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "dataflow",
