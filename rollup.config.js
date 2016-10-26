@@ -3,7 +3,7 @@ import commonjs from "rollup-plugin-commonjs";
 
 
 export default {
-  entry: 'src/index',
+  entry: 'index',
   format: 'umd',
   moduleName: 'flume',
   plugins: [node(), commonjs()]
