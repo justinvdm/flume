@@ -4,7 +4,7 @@
   "description": "an experiment in dataflow",
   "license": "MIT",
   "repository": "justinvdm/flume-js",
-  "main": "dest/flume.js",
+  "main": "dist/flume.js",
   "jsnext:main": "src/index.js",
   "author": {
     "name": "justinvdm",
@@ -17,10 +17,10 @@
     "test": "ava tests/*.test.js",
     "lint": "eslint index.js tests/*.js",
     "check": "npm run lint && npm test",
-    "clean": "rm -rf dest",
-    "build:dev": "rollup -cmo dest/flume.js",
-    "build:prd": "rollup -c | uglifyjs -mc unsafe > dest/flume.min.js",
-    "build": "npm run clean && mkdir dest && npm run build:dev && npm run build:prd",
+    "clean": "rm -rf dist",
+    "build:dev": "rollup -cmo dist/flume.js",
+    "build:prd": "rollup -c | uglifyjs -mc unsafe > dist/flume.min.js",
+    "build": "npm run clean && mkdir dist && npm run build:dev && npm run build:prd",
     "preversion": "npm run check",
     "version": "npm run build && git add -A dist",
     "postversion": "echo git push && git push --tags"
