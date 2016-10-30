@@ -18,9 +18,8 @@
     "lint": "eslint index.js tests/*.js",
     "check": "npm run lint && npm test",
     "clean": "rm -rf dist",
-    "bundle:dev": "rollup -cmo dist/flume.js",
     "bundle:prd": "NODE_ENV=production rollup -cmo dist/flume.min.js",
-    "build": "npm run clean && mkdir dist && npm run bundle:prd && npm run bundle:dev",
+    "build": "npm run clean && mkdir dist && npm run bundle:prd",
     "preversion": "npm run check",
     "version": "npm run build && git add -A dist",
     "postversion": "git push && git push --tags"
