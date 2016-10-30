@@ -18,9 +18,9 @@
     "lint": "eslint index.js tests/*.js",
     "check": "npm run lint && npm test",
     "clean": "rm -rf dist",
-    "build:dev": "rollup -cmo dist/flume.js",
-    "build:prd": "rollup -c | uglifyjs -mc unsafe > dist/flume.min.js",
-    "build": "npm run clean && mkdir dist && npm run build:dev && npm run build:prd",
+    "bundle:dev": "rollup -cmo dist/flume.js",
+    "bundle:prd": "NODE_ENV=production rollup -cmo dist/flume.min.js",
+    "build": "npm run clean && mkdir dist && npm run bundle:prd && npm run bundle:dev",
     "preversion": "npm run check",
     "version": "npm run build && git add -A dist",
     "postversion": "git push && git push --tags"
@@ -43,7 +43,7 @@
     "rollup": "^0.36.3",
     "rollup-plugin-commonjs": "^5.0.5",
     "rollup-plugin-node-resolve": "^2.0.0",
-    "uglifyjs": "^2.4.10"
+    "rollup-plugin-uglify": "^1.0.1"
   },
   "ava": {
     "require": "babel-register"
