@@ -1,4 +1,4 @@
-import { nil, resolveSeq } from './core';
+import {nil, resolveSeq} from './core';
 
 
 export default function filter(fn) {

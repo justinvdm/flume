@@ -1,6 +1,6 @@
 import test from 'ava';
-import { create, input, filter } from '..';
-import { capture, defer } from './utils';
+import {create, input, filter} from '..';
+import {capture, defer} from './utils';
 
 
 test('filter', t => {

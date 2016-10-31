@@ -1,6 +1,6 @@
 import test from 'ava';
-import { create, input, map } from '..';
-import { capture } from './utils';
+import {create, input, map} from '..';
+import {capture} from './utils';
 
 
 test('map', t => {

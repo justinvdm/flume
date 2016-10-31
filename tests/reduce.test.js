@@ -1,6 +1,6 @@
 import test from 'ava';
-import { create, input, reduce } from '..';
-import { capture, defer } from './utils';
+import {create, input, reduce} from '..';
+import {capture, defer} from './utils';
 
 
 test('reduce', t => {
