@@ -22,6 +22,25 @@ test('filter', t => {
 });
 
 
+test('default function', t => {
+  const src = input();
+  const res = [];
+
+  const graph = [src]
+    .concat(filter())
+    .concat(capture(res));
+
+  create(graph)
+    .dispatch(src, false)
+    .dispatch(src, 0)
+    .dispatch(src, 1)
+    .dispatch(src, true)
+    .dispatch(src, 3);
+
+  t.deepEqual(res, [1, true, 3]);
+});
+
+
 test('promise support', async t => {
   const src = input();
   const res = [];
