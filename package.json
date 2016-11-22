@@ -4,7 +4,7 @@
   "description": "an experiment in dataflow",
   "license": "MIT",
   "repository": "justinvdm/flume-js",
-  "main": "dist/flume.js",
+  "main": "dist/flume.min.js",
   "jsnext:main": "src/index.js",
   "author": {
     "name": "justinvdm",
