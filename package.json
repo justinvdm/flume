@@ -3,12 +3,11 @@
   "version": "0.0.0",
   "description": "define event-prone applications as a tree of functions",
   "license": "MIT",
-  "repository": "justinvdm/flume-js",
+  "repository": "justinvdm/flume",
   "main": "dist/flume.min.js",
   "jsnext:main": "src/index.js",
   "author": {
-    "name": "justinvdm",
-    "url": "justinvdm.github.io"
+    "name": "justinvdm"
   },
   "engines": {
     "node": ">=4"
