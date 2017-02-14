@@ -5,7 +5,7 @@
 > an experiment in dataflow
 
 ```js
-import { create, input, map, reduce } from 'flume-js';
+import {create, input, map, reduce} from 'flume-js';
 
 const src1 = input();
 const src2 = input();
@@ -26,6 +26,10 @@ create(graph)
   .dispatch(src1, 3);  // 13
 ```
 
+```
+Sorry about the lack of documentation, I know its really not great. Will add this as soon as I can.
+```
+
 ## install
 
 ```
@@ -34,12 +38,12 @@ $ npm i -S flume-js
 
 ## usage
 
-at the moment, flume can be used in with es2015-module-aware bundlers and commonjs environments:
+At the moment, flume can be used in with es2015-module-aware bundlers and commonjs environments:
 
 ```js
 // example using commonjs
 const flume = require('flume-js');
 
 // example using es2015-aware bundlers
-import { create, input, map, reduce } from 'flume-js';
+import {create, input, map, reduce} from 'flume-js';
 ```
