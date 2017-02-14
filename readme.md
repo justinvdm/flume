@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/justinvdm/flume-core.svg?branch=master)](https://travis-ci.org/justinvdm/flume)
 
-> an experiment in dataflow
+> define event-prone applications as a tree of functions
 
 ```js
 import {create, input, map, reduce} from 'flume-js';
