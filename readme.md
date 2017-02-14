@@ -22,8 +22,8 @@ const graph = [[a, b]]
 
 create(graph)
   .dispatch(src1, 1)   // 3
-  .dispatch(src1, 2)   // 7
-  .dispatch(src1, 3);  // 13
+  .dispatch(src2, 2)   // 9
+  .dispatch(src1, 3);  // 15
 ```
 
 ```
