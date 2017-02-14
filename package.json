@@ -1,7 +1,7 @@
 {
   "name": "flume-js",
   "version": "0.0.0",
-  "description": "define event prone applications as a tree of functions",
+  "description": "define event-prone applications as a tree of functions",
   "license": "MIT",
   "repository": "justinvdm/flume-js",
   "main": "dist/flume.min.js",
