@@ -8,12 +8,12 @@ test('map', t => {
   const res = [];
 
   const graph = [src]
-    .concat(map(v => v * 2))
+    .concat(map((v, {source}) => (v + (src === source)) * 2))
     .concat(capture(res));
 
   create(graph)
     .dispatch(src, 2)
     .dispatch(src, 3);
 
-  t.deepEqual(res, [4, 6]);
+  t.deepEqual(res, [6, 8]);
 });

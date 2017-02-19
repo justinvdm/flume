@@ -8,7 +8,7 @@ test('filter', t => {
   const res = [];
 
   const graph = [src]
-    .concat(filter(v => !(v % 2)))
+    .concat(filter((v, {source}) => (v + (src === source)) % 2))
     .concat(capture(res));
 
   create(graph)

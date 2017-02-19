@@ -4,8 +4,8 @@ import identity from './utils/identity';
 
 export default function filter(fn) {
   fn = fn || identity;
-  return function filterFn(_, v) {
-    return [null, resolveSeq([fn(v), v]).then(test)];
+  return function filterFn(_, v, opts) {
+    return [null, resolveSeq([fn(v, opts), v]).then(test)];
   };
 }
 

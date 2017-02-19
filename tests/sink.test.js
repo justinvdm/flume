@@ -8,14 +8,14 @@ test('sink', t => {
   const res = [];
 
   const graph = [src]
-    .concat(sink(() => 10, (total, v) => total + v))
+    .concat(sink(() => 10, (total, v, {source}) => total + v + (source == src)))
     .concat(capture(res));
 
   create(graph)
     .dispatch(src, 2)
     .dispatch(src, 3);
 
-  t.deepEqual(res, [12, 13]);
+  t.deepEqual(res, [13, 14]);
 });
 
 

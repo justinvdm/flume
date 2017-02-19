@@ -4,8 +4,8 @@ export default function reduce(init, fn) {
     process: reduceFn
   };
 
-  function reduceFn(state, v) {
-    var res = fn(state, v);
+  function reduceFn(state, v, opts) {
+    var res = fn(state, v, opts);
     return [res, res];
   }
 }

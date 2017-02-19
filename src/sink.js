@@ -4,7 +4,7 @@ export default function sink(init, fn) {
     process: sinkFn
   };
 
-  function sinkFn(state, v) {
-    return [state, fn(state, v)];
+  function sinkFn(state, v, opts) {
+    return [state, fn(state, v, opts)];
   }
 }

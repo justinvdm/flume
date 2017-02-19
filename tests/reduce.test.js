@@ -8,14 +8,14 @@ test('reduce', t => {
   const res = [];
 
   const graph = [src]
-    .concat(reduce(() => 10, (total, v) => total + v))
+    .concat(reduce(() => 10, (total, v, {source}) => total + v + (source === src)))
     .concat(capture(res));
 
   create(graph)
     .dispatch(src, 2)
     .dispatch(src, 3);
 
-  t.deepEqual(res, [12, 15]);
+  t.deepEqual(res, [13, 17]);
 });
 
 
