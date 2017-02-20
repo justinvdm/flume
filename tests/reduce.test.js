@@ -19,6 +19,22 @@ test('reduce', t => {
 });
 
 
+test('no init', t => {
+  const src = input();
+  const res = [];
+
+  const graph = [src]
+    .concat(reduce((total, v) => (total || 0) + v))
+    .concat(capture(res));
+
+  create(graph)
+    .dispatch(src, 2)
+    .dispatch(src, 3);
+
+  t.deepEqual(res, [2, 5]);
+});
+
+
 test('promise support', async t => {
   const src = input();
   const res = [];
