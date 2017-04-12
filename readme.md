@@ -28,18 +28,6 @@ create(graph)
   .dispatch(src1, 3);  // 15
 ```
 
-## overview
-
-### what is flume?
-flume is an attempt at a library for defining your applications as a set of inputs and transformations of those inputs.
-
-To some limited degree, it is along the same lines as [Observables](https://github.com/tc39/proposal-observable) and libraries like [rxjs](https://github.com/ReactiveX/rxjs) and [xstream](http://staltz.com/xstream/).
-
-
-### main design goals
-- constrain applications to statically defined graph of inputs and transformations
-- support defining of message types (e.g. values, errors, types of side effects, custom)
-
 ## install
 
 ```
@@ -58,15 +46,106 @@ const flume = require('flume-js');
 import {create, input, map, reduce} from 'flume-js';
 ```
 
+## overview
+
+### what is flume?
+flume is an attempt at a library for defining your applications as a set of inputs and transformations of those inputs.
+
+To some limited degree, it is along the same lines as [Observables](https://github.com/tc39/proposal-observable) and libraries like [rxjs](https://github.com/ReactiveX/rxjs) and [xstream](http://staltz.com/xstream/).
+
+
+### api overview
+Applications can be thought of as pipelines. In the simplest case, we can have a single input at the top, followed by transformation functions:
+
+```js
+const src = input();
+
+const app = create([
+  src,
+  map(v => v * 2),
+  map(v => v + 1),
+  map(console.log)
+]);
+
+app
+  .dispatch(src, 2)  // 5
+  .dispatch(src, 3)  // 7
+```
+
+We can also have multiple inputs at the top:
+
+```js
+const src1 = input();
+const src2 = input();
+
+const app = create([
+  [src1, src2],
+  map(v => v * 2),
+  map(v => v + 1),
+  map(console.log)
+]);
+
+app
+  .dispatch(src1, 2)  // 5
+  .dispatch(src2, 3)  // 7
+```
+
+Applications can also be defined as pipelines of pipelines:
+
+```js
+import {create, input, map, reduce} from 'flume-js';
+
+const src1 = input();
+const src2 = input();
+
+const app = create([
+  [[src1, map(v => v * 2)], [src2, map(v => v * 3)]],
+  reduce(() => 1, (total, v) => total + v),
+  map(console.log)
+])
+
+app
+  .dispatch(src1, 1)   // 3
+  .dispatch(src2, 2)   // 9
+  .dispatch(src1, 3);  // 15
+```
+
+**note** The examples above use array literals to define the application. While this helps for demonstration purposes, the indended convention for defining applications is to use [`Array.prototype.concat()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). This allows us to define applications using a chainable api without flume needing to create some wrapper api to achive the same result. More importantly though, since `Array.prototype.concat` accepts arrays of values, this also gives us a pattern for appending multiple transformations. For example:
+
+```js
+const flatMap = fn => []
+  .concat(flatten())
+  .concat(map(fn));
+
+const src = input();
+
+const graph = [input]
+  .concat(flatMap(v => v * 2))
+  .concat(map(console.log));
+
+create(graph)
+  .dispatch(src, 2)
+// 4
+  .dispatch(src, [3, 4])
+// 6
+// 8
+```
+
+### main design goals
+- constrain applications to statically defined graph of inputs and transformations
+- support defining of message types (e.g. values, errors, types of side effects, custom)
+- transformations either return results instead of pushing them through in an imperitive manner
+- support promise-returning functions, but don't mandate promise support for apps that don't need it
+
 ## api
 
 ### core api
 
-#### `input()`
-
 #### `create(graphDef)`
 
 #### `graph.dispatch(src, value)`
+
+#### `input()`
 
 #### `except(fn)`
 
