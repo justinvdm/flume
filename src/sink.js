@@ -1,7 +1,7 @@
 export default function sink(init, fn) {
   return {
     init: init,
-    process: sinkFn
+    transform: sinkFn
   };
 
   function sinkFn(state, v, opts) {

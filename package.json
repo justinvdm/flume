@@ -1,6 +1,6 @@
 {
   "name": "flume-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "define event-prone applications as a tree of functions",
   "license": "MIT",
   "repository": "justinvdm/flume",
@@ -30,7 +30,7 @@
     "flux"
   ],
   "dependencies": {
-    "flume-core": "~0.1.1"
+    "flume-core": "~0.1.2"
   },
   "devDependencies": {
     "ava": "^0.15.2",

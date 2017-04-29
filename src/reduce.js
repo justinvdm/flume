@@ -8,7 +8,7 @@ export default function reduce(init, reducer) {
 
   return {
     init: init,
-    process: reduceFn
+    transform: reduceFn
   };
 
   function reduceFn(state, v, opts) {

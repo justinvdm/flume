@@ -7,7 +7,7 @@ export default function bindInputs(bindFn, inputs) {
     bindFn = conj;
   }
 
-  return function processFn(inputFns, v, opts) {
+  return function transformFn(inputFns, v, opts) {
     inputFns = inputFns || createInputFns(inputs, opts.dispatch);
     return [inputFns, bindFn(v, inputFns)];
   };
