@@ -1,5 +1,5 @@
 import test from 'ava';
-import {create, input, strsplit} from '..';
+import {create, input, strsplit} from '../src';
 import {capture} from './utils';
 
 

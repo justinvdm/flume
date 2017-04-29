@@ -1,5 +1,5 @@
 import test from 'ava';
-import {create, input, map} from '..';
+import {create, input, map} from '../src';
 import {capture} from './utils';
 
 

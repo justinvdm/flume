@@ -1,5 +1,5 @@
 import test from 'ava';
-import {create, input, map, bindInputs} from '..';
+import {create, input, map, bindInputs} from '../src';
 import {capture} from './utils';
 
 

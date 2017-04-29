@@ -1,5 +1,5 @@
 import test from 'ava';
-import {create, input, sink} from '..';
+import {create, input, sink} from '../src';
 import {capture, defer} from './utils';
 
 
