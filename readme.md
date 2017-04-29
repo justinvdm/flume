@@ -55,7 +55,7 @@ To some limited degree, it is along the same lines as [Observables](https://gith
 
 
 ### api overview
-Applications can be thought of as pipelines. In the simplest case, we can have a single input at the top, followed by transformation functions:
+Applications can be thought of as pipelines. In the simplest case, we can have a single input at the top, followed by transform functions:
 
 ```js
 const src = input();
@@ -110,7 +110,7 @@ app
   .dispatch(src1, 3);  // 15
 ```
 
-**note** The examples above use array literals to define the application. While this helps for demonstration purposes, the indended convention for defining applications is to use [`Array.prototype.concat()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). This allows us to define applications using a chainable api without flume needing to create some wrapper api to achive the same result. More importantly though, since `Array.prototype.concat` accepts arrays of values, this also gives us a pattern for appending multiple transformations. For example:
+**note** The examples above use array literals to define the application. While this helps for demonstration purposes, the indended convention for defining applications is to use [`Array.prototype.concat()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). This allows us to define applications using a chainable api without flume needing to create some wrapper api to achieve the same result. More importantly though, since `Array.prototype.concat` accepts arrays of values, this also gives us a pattern for appending multiple transforms. For example:
 
 ```js
 const flatMap = fn => []
@@ -131,17 +131,35 @@ create(graph)
 // 8
 ```
 
+### value propagation
+
+### error propagation
+
 ### main design goals
-- constrain applications to statically defined graph of inputs and transformations
+- constrain applications to statically defined graph of inputs and transforms
 - support defining of message types (e.g. values, errors, types of side effects, custom)
-- transformations either return results instead of pushing them through in an imperitive manner
+- transforms return results instead of pushing them through in an imperitive manner
 - support promise-returning functions, but don't mandate promise support for apps that don't need it
 
 ## api
 
-### core api
+### graph creation
 
 #### `create(graphDef)`
+
+Returns a built graph from the given graph definition.
+
+Graphs are defined as arrays. The first element of the array may be an [`input`](#input), a graph definition, or an array of either of these. All following array elements may only be a [transform](#transforms) (see [transform definitions](#transform-definitions) for a lower-level api for defining these).
+
+```js
+const src = input();
+
+const app = [src]
+  .concat(map(console.log));
+
+create(app)
+  .dispatch(src, 23);  // 23
+```
 
 #### `graph.dispatch(src, value)`
 
@@ -149,21 +167,61 @@ create(graph)
 
 #### `except(fn)`
 
-#### `nil`
-
-#### `message(type, value)`
-
-#### `trap(processorDef)`
-
-### processor utility library
+### transforms
 
 #### `map(fn)`
 
 #### `filter([fn])`
 
+#### `strsplit(sep)`
+
 #### `sink(initFn, processFn)`
 
-#### `strsplit(sep)`
+### lower level api
+
+#### transform definitions
+
+In the simplest case, a transform can be defined as a function. A transform function takes in the transform's current `state`, the `value` to be transformed, and an `opts` object. It should return an array containing the transform's new state as its first element and the value to be propagated as its second element.
+
+```js
+const src = input();
+
+const graph = [src]
+  .concat((state, v) => [(state || 0) + v, (state || 0) + v + 1])
+  .concat(map(console.log));
+
+create(graph)
+  .dispatch(src, 1)  // 2
+  .dispatch(src, 2);  // 4
+```
+
+If an array with a single value is returned, the value is taken as both the transform's new state, and the value to be propagated.
+
+```js
+const src = input();
+
+const graph = [src]
+  .concat((state, v) => [(state || 0) + v])
+  .concat(map(console.log));
+
+create(graph)
+  .dispatch(src, 2)  // 2
+  .dispatch(src, 3);  // 5
+```
+
+The given `opts` object contains the following properties:
+
+- `source`: the input from which propagation started
+- `parent`: the definition of the transform or input from which `value` propagated
+- `dispatch`: a reference to [`graph.dispatch()`](#graph-dispatch-src-value).
+
+### propagating multiple values
+
+### short-circuiting propagation with `nil`
+
+#### `message(type, value)`
+
+#### `trap(transformDef)`
 
 ### internal utilities
 
