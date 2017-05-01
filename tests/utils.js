@@ -1,5 +1,8 @@
 function capture(arr) {
-  return (_, v) => arr.push(v);
+  return (_, v) => {
+    arr.push(v);
+    return {value: null};
+  };
 }
 
 

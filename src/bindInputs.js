@@ -7,9 +7,12 @@ export default function bindInputs(bindFn, inputs) {
     bindFn = conj;
   }
 
-  return function transformFn(inputFns, v, opts) {
+  return function transformFn(inputFns, obj, opts) {
     inputFns = inputFns || createInputFns(inputs, opts.dispatch);
-    return [inputFns, bindFn(v, inputFns)];
+    return {
+      state: inputFns,
+      value: bindFn(obj, inputFns)
+    };
   };
 
   function createInputFns(inputs, dispatch) {

@@ -1,10 +1,14 @@
+import {maybeAsync} from './core';
+import resultState from './utils/resultState';
+
+
 export default function reduce(init, reducer) {
   if (arguments.length < 2) {
     reducer = init;
     init = retNull;
   }
 
-  reducer = parseReducer(reducer);
+  reducer = maybeAsync(parseReducer(reducer));
 
   return {
     init: init,
@@ -12,10 +16,7 @@ export default function reduce(init, reducer) {
   };
 
   function reduceFn(state, v, opts) {
-    try{
-    var res = reducer(state, v, opts);
-    return [res, res];
-    } catch(e) { console.log(e); }
+    return reducer(state, v, opts).then(resultState);
   }
 }
 
@@ -28,7 +29,7 @@ function parseReducer(obj) {
 
 
 function caseSourceOfReducer(pairs) {
-  var defaultFn = identityProcessor;
+  var defaultFn = identityReducer;
 
   if (typeof pairs[pairs.length - 1] == 'function') {
     defaultFn = pairs[pairs.length - 1];
@@ -56,6 +57,6 @@ function retNull() {
 }
 
 
-function identityProcessor(state, v) {
+function identityReducer(state, v) {
   return v;
 }

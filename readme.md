@@ -181,13 +181,19 @@ create(app)
 
 #### transform definitions
 
-In the simplest case, a transform can be defined as a function. A transform function takes in the transform's current `state`, the `value` to be transformed, and an `opts` object. It should return an array containing the transform's new state as its first element and the value to be propagated as its second element.
+In the simplest case, a transform can be defined as a function. A transform function takes in the transform's current `state`, the `value` to be transformed, and an `opts` object. It should return an object containing with the folling properties:
+
+- `state`: the transform's new state. If omitted, the node's current state is assumed.
+- `value` / `values`: the result value to propagated to the next transform in the chain. If specified using the property name `values`, the property is taken as an [array of result values](#propagating-multiple-values) to be propagated sequentially.
 
 ```js
 const src = input();
 
 const graph = [src]
-  .concat((state, v) => [(state || 0) + v, (state || 0) + v + 1])
+  .concat((state, v) => ({
+    state: (state || 0) + v,
+    value: (state || 0) + v + 1
+  })
   .concat(map(console.log));
 
 create(graph)
@@ -195,13 +201,13 @@ create(graph)
   .dispatch(src, 2);  // 4
 ```
 
-If an array with a single value is returned, the value is taken as both the transform's new state, and the value to be propagated.
+If `value`/`values` are omitted but `state` is given, `state` is used as both the transform's new state _and_ the result value to be propagated.
 
 ```js
 const src = input();
 
 const graph = [src]
-  .concat((state, v) => [(state || 0) + v])
+  .concat((state, v) => ({state: (state || 0) + v}))
   .concat(map(console.log));
 
 create(graph)
