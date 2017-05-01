@@ -193,7 +193,7 @@ const graph = [src]
   .concat((state, v) => ({
     state: (state || 0) + v,
     value: (state || 0) + v + 1
-  })
+  }))
   .concat(map(console.log));
 
 create(graph)
