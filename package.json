@@ -4,7 +4,8 @@
   "description": "define event-prone applications as a tree of functions",
   "license": "MIT",
   "repository": "justinvdm/flume",
-  "main": "dist/flume.min.js",
+  "main": "lib/index.js",
+  "module": "src/index.js",
   "jsnext:main": "src/index.js",
   "author": {
     "name": "justinvdm"
@@ -15,13 +16,14 @@
   "scripts": {
     "test": "ava tests/*.test.js",
     "lint": "eslint index.js tests/*.js",
-    "check": "npm run lint && npm test",
-    "clean": "rm -rf dist",
-    "bundle:prd": "NODE_ENV=production rollup -cmo dist/flume.min.js",
-    "build": "npm run clean && mkdir dist && npm run bundle:prd",
+    "check": "npm run lint && npm run flow && npm test",
+    "flow": "flow",
+    "clean": "rm -rf lib",
+    "transpile": "babel -d lib src",
+    "build": "npm run clean && mkdir lib && npm run transpile",
     "preversion": "npm run check",
-    "version": "npm run build && git add -A dist",
-    "postversion": "git push && git push --tags"
+    "version": "npm run build && git add -A lib",
+    "postversion": "git push && git push --tags && npm run clean"
   },
   "keywords": [
     "dataflow",
@@ -34,19 +36,21 @@
   },
   "devDependencies": {
     "ava": "^0.15.2",
-    "babel": "^6.5.2",
+    "babel-cli": "^6.24.1",
     "babel-eslint": "^7.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.16.0",
+    "babel-preset-flow": "^6.23.0",
     "eslint": "^3.7.1",
-    "rollup": "^0.36.3",
-    "rollup-plugin-commonjs": "^5.0.5",
-    "rollup-plugin-node-resolve": "^2.0.0",
-    "rollup-plugin-uglify": "^1.0.1"
+    "eslint-plugin-flowtype": "^2.35.0",
+    "flow-bin": "^0.52.0"
   },
   "ava": {
     "require": "babel-register"
   },
   "babel": {
+    "presets": [
+      "flow"
+    ],
     "plugins": [
       "transform-es2015-modules-commonjs"
     ]
