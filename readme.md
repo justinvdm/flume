@@ -1,6 +1,6 @@
 # flume-js
 
-[![Build Status](https://travis-ci.org/justinvdm/flume-core.svg?branch=master)](https://travis-ci.org/justinvdm/flume)
+[![Build Status](https://travis-ci.org/justinvdm/flume-js.svg?branch=master)](https://travis-ci.org/justinvdm/flume-js)
 
 > define event-prone applications as a tree of functions
 
@@ -12,20 +12,20 @@ import {create, input, map, reduce} from 'flume-js';
 const src1 = input();
 const src2 = input();
 
-const a = [src1]
-  .concat(map(v => v * 2));
+const a = pipe(src1, map(v => v * 2));
+const b = pipe(src2, map(v => v * 3));
 
-const b = [src2]
-  .concat(map(v => v * 3));
+const graph = pipe([a, b], [
+  reduce(() => 1, (total, v) => total + v),
+  map(console.log)
+]);
 
-const graph = [[a, b]]
-  .concat(reduce(() => 1, (total, v) => total + v))
-  .concat(map(console.log));
-
-create(graph)
-  .dispatch(src1, 1)   // 3
-  .dispatch(src2, 2)   // 9
-  .dispatch(src1, 3);  // 15
+pipe(graph, [
+  create
+  dispatch(src1(1))  // 3
+  dispatch(src2(2))  // 9
+  dispatch(src1(3))  // 15
+]);  
 ```
 
 ## install
@@ -60,34 +60,37 @@ Applications can be thought of as pipelines. In the simplest case, we can have a
 ```js
 const src = input();
 
-const app = create([
-  src,
+const graph = pipe(src, [
   map(v => v * 2),
   map(v => v + 1),
   map(console.log)
 ]);
 
-app
-  .dispatch(src, 2)  // 5
-  .dispatch(src, 3)  // 7
+pipe(graph, [
+  create,
+  dispatch(src(2)),  // 5
+  dispatch(src(3))  // 5
+]);
 ```
 
-We can also have multiple inputs at the top:
+We can also have multiple inputs at the top of the pipeline:
 
 ```js
 const src1 = input();
 const src2 = input();
 
-const app = create([
-  [src1, src2],
+const app = pipe([src1, src2], [
   map(v => v * 2),
   map(v => v + 1),
-  map(console.log)
+  map(console.log),
+  create
 ]);
 
-app
-  .dispatch(src1, 2)  // 5
-  .dispatch(src2, 3)  // 7
+pipe(graph, [
+  create,
+  dispatch(src(2)),  // 5
+  dispatch(src(3))  // 7
+]);
 ```
 
 Applications can also be defined as pipelines of pipelines:
@@ -98,37 +101,20 @@ import {create, input, map, reduce} from 'flume-js';
 const src1 = input();
 const src2 = input();
 
-const app = create([
-  [[src1, map(v => v * 2)], [src2, map(v => v * 3)]],
+const a = pipe(src1, map(v => v * 2));
+const b = pipe(src2, map(v => v * 3));
+
+const graph = pipe([a, b], [
   reduce(() => 1, (total, v) => total + v),
   map(console.log)
-])
+]);
 
-app
-  .dispatch(src1, 1)   // 3
-  .dispatch(src2, 2)   // 9
-  .dispatch(src1, 3);  // 15
-```
-
-**note** The examples above use array literals to define the application. While this helps for demonstration purposes, the indended convention for defining applications is to use [`Array.prototype.concat()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). This allows us to define applications using a chainable api without flume needing to create some wrapper api to achieve the same result. More importantly though, since `Array.prototype.concat` accepts arrays of values, this also gives us a pattern for appending multiple transforms. For example:
-
-```js
-const flatMap = fn => []
-  .concat(flatten())
-  .concat(map(fn));
-
-const src = input();
-
-const graph = [input]
-  .concat(flatMap(v => v * 2))
-  .concat(map(console.log));
-
-create(graph)
-  .dispatch(src, 2)
-// 4
-  .dispatch(src, [3, 4])
-// 6
-// 8
+pipe(graph, [
+  create
+  dispatch(src1(1))  // 3
+  dispatch(src2(2))  // 9
+  dispatch(src1(3))  // 15
+]);  
 ```
 
 ### value propagation
@@ -138,32 +124,30 @@ create(graph)
 ### main design goals
 - constrain applications to statically defined graph of inputs and transforms
 - support defining of message types (e.g. values, errors, types of side effects, custom)
-- transforms return results instead of pushing them through in an imperitive manner
+- transforms return results instead of pushing them through in an imperative manner
 - support promise-returning functions, but don't mandate promise support for apps that don't need it
 
 ## api
 
 ### graph creation
 
-#### `create(graphDef)`
+#### `create(tailDef)`
 
-Returns a built graph from the given graph definition.
+Returns a built graph from the node definition, where the node definition represent's the tail of the graph.
 
-Graphs are defined as arrays. The first element of the array may be an [`input`](#input), a graph definition, or an array of either of these. All following array elements may only be a [transform](#transforms) (see [transform definitions](#transform-definitions) for a lower-level api for defining these).
+Each transform definition function (.e.g. `map` below) returns a function that takes in a parent node definition or array of parent node definitions and returns a new node definition.
 
 ```js
-const src = input();
-
-const app = [src]
-  .concat(map(console.log));
-
-create(app)
-  .dispatch(src, 23);  // 23
+const input = src();
+const graph = pipe(src, map(console.log));
+dispatch(create(graph), src(23));
 ```
 
-#### `graph.dispatch(src, value)`
+#### `pipe(value, fns)`
 
-#### `input()`
+#### `dispatch(msg)`
+
+#### `input([fn])`
 
 #### `except(fn)`
 
@@ -171,49 +155,17 @@ create(app)
 
 #### `map(fn)`
 
-#### `filter([fn])`
+#### `filter(fn)`
 
-#### `strsplit(sep)`
+#### `reduce(initFn, reduceFn)`
 
-#### `sink(initFn, processFn)`
+#### `joinEvents(mapFn, inputs)`
 
 ### lower level api
 
 #### transform definitions
 
-In the simplest case, a transform can be defined as a function. A transform function takes in the transform's current `state`, the `value` to be transformed, and an `opts` object. It should return an object containing with the folling properties:
-
-- `state`: the transform's new state. If omitted, the node's current state is assumed.
-- `value` / `values`: the result value to propagated to the next transform in the chain. If specified using the property name `values`, the property is taken as an [array of result values](#propagating-multiple-values) to be propagated sequentially.
-
-```js
-const src = input();
-
-const graph = [src]
-  .concat((state, v) => ({
-    state: (state || 0) + v,
-    value: (state || 0) + v + 1
-  }))
-  .concat(map(console.log));
-
-create(graph)
-  .dispatch(src, 1)  // 2
-  .dispatch(src, 2);  // 4
-```
-
-If `value`/`values` are omitted but `state` is given, `state` is used as both the transform's new state _and_ the result value to be propagated.
-
-```js
-const src = input();
-
-const graph = [src]
-  .concat((state, v) => ({state: (state || 0) + v}))
-  .concat(map(console.log));
-
-create(graph)
-  .dispatch(src, 2)  // 2
-  .dispatch(src, 3);  // 5
-```
+In the simplest case, a transform can be defined as a function. A transform function takes in the transform's current `state`, the `value` to be transformed, and an `opts` object. It should return a tuple of the form `[nextState, result]`, where `nextState` represents the transform's new state, and `result` represents the value to be propagated to the transform's child node.
 
 The given `opts` object contains the following properties:
 
@@ -230,9 +182,5 @@ The given `opts` object contains the following properties:
 #### `trap(transformDef)`
 
 ### internal utilities
-
-#### `maybeAsync(fn)`
-
-#### `resolveSeq(values)`
 
 #### `conj(...objects)`
