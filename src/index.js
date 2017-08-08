@@ -1,2 +1,2 @@
 export * from './core';
-export { default as throttle } from './throttle';
+export { default as joinEvents } from './joinEvents';
