@@ -1,29 +1,24 @@
 function capture(arr) {
   return (_, v) => {
-    arr.push(v);
-    return {value: null};
-  };
+    arr.push(v)
+    return { value: null }
+  }
 }
 
-
 function defer() {
-  let resolve;
-  let reject;
+  let resolve
+  let reject
 
   const promise = new Promise((resolveFn, rejectFn) => {
-    resolve = resolveFn;
-    reject = rejectFn;
-  });
+    resolve = resolveFn
+    reject = rejectFn
+  })
 
   return {
     resolve,
     reject,
     promise
-  };
+  }
 }
 
-
-export {
-  capture,
-  defer
-};
+export { capture, defer }
