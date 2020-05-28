@@ -1,6 +1,6 @@
 {
   "name": "flume-js",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "a library for defining applications as a set of inputs and transformations",
   "license": "MIT",
   "repository": "justinvdm/flume",
